@@ -1,8 +1,3 @@
-getgenv().HostUser = "DuckyDayy"
-getgenv().Alts = {
-	137474079,
-}
-getgenv().CustomDrops = {}
 -- Cmds
 if table.find(getgenv().Alts,game.Players.LocalPlayer.UserId) then
 	getgenv().PointInTable = table.find(getgenv().Alts,game.Players.LocalPlayer.UserId)
