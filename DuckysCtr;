@@ -38,7 +38,7 @@ TextLabel.Font = Enum.Font.Gotham
 TextLabel.Text = "#FUCKHUSAM AND FUCK COSMO AND FUCK QITKOT AND FUCK EVEYR OTHER HUSAM SCRIPT BITCH ONG , Welcome "..game.Players.LocalPlayer.Name.." yes that is ur username if u wanna see it monkey"
 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel.TextScaled = true
-TextLabel.TextSize = 14.000
+TextLabel.TextSize = 55.000
 TextLabel.TextWrapped = true
 
 
