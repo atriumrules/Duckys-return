@@ -41,39 +41,11 @@ if Testing == false then
 	TextLabel.TextScaled = false
 	TextLabel.TextSize = 19.000
 	TextLabel.TextWrapped = false
+	if not game:IsLoaded() then
+		repeat wait(.1) until game:IsLoaded() 
+	end
 	game:GetService("RunService"):Set3dRenderingEnabled(false)
-
-	task.spawn(function()
-		if Crashed then
-			return
-		end
-		setfpscap(5)
-		repeat wait() until game:IsLoaded()
-		if Crashed then
-			return
-		end
-		setfpscap(5)
-		wait(1)
-		if Crashed then
-			return
-		end
-		setfpscap(5)
-		wait(1)
-		if Crashed then
-			return
-		end
-		setfpscap(5)
-		wait(1)
-		if Crashed then
-			return
-		end
-		setfpscap(5)
-		wait(1)
-		if Crashed then
-			return
-		end
-		setfpscap(5)
-	end)
+	setfpscap(5)
 end
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/MsorkyScripts/OpenSourceAntiCheat/main/AntiCheatBypass.txt"))()
