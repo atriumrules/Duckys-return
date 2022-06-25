@@ -636,7 +636,7 @@ local function Initiate()
 						end
 					end
 				end
-			elseif Args[2] == ".stopaura" then
+			elseif Message == ".stopaura" then
 				CmdSettings["Aura"] = nil
 			elseif Args[1] == ".cdrop" and Args[2] ~= nil and not CmdSettings["CustomDrop"] then
 				local Number = GetNumberFromText(Args[2]) 
