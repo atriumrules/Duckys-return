@@ -387,6 +387,8 @@ local function GetNumberFromText(str)
 	end
 	return tonumber(str)
 end
+local DropFolder = workspace.Ignored:FindFirstChild("Drop")
+
 local function Initiate()
 	CurrAnim = nil
 	for Index,Var in pairs(CmdSettings) do
@@ -404,13 +406,10 @@ local function Initiate()
 			if Args[1] == ".drop" then
 				Drop(true)
 			elseif Message == ".loopdel" then
-				local DropFolder = workspace.Ignored.Drop
-				for Index,child in pairs(DropFolder:GetChildren()) do
-					game.Debris:AddItem(child,0.1)
+				if DropFolder then
+					DropFolder:Destroy()
+					DropFolder = nil
 				end
-				DropFolder.ChildAdded:Connect(function(Child)
-					game.Debris:AddItem(Child,0.1)
-				end)
 			elseif Message == ".circle host" and Host and Host.Character and Host.Character:FindFirstChild("Humanoid") and Host.Character.Humanoid.Health > 0 then
 				local angle = 0
 				local cfr = Host.Character.HumanoidRootPart.CFrame*CFrame.new(0,1,0)
@@ -593,18 +592,19 @@ local function Initiate()
 						CmdSettings["Aura"] = true
 						CmdSettings["Dropping"] = nil
 						CmdSettings["CustomDrop"] = nil
-						local DropFolder = workspace.Ignored.Drop
-
-						while CmdSettings["Aura"] == true do
-							for i,v in pairs(DropFolder:GetChildren()) do
-								if v:IsA("BasePart") and v.Name == "MoneyDrop" then
-									if (v.Position-game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude <= 12 then
-										if CmdSettings["Aura"] == true then
-											fireclickdetector(v.ClickDetector)
+				
+						while CmdSettings["Aura"] == true and DropFolder do
+							if DropFolder then
+								for i,v in pairs(DropFolder:GetChildren()) do
+									if v:IsA("BasePart") and v.Name == "MoneyDrop" then
+										if (v.Position-game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude <= 12 then
+											if CmdSettings["Aura"] == true then
+												fireclickdetector(v.ClickDetector)
+											end
+											wait(0.2)
 										end
-										wait(0.2)
 									end
-								end
+								end								
 							end
 							wait()
 						end
@@ -614,12 +614,12 @@ local function Initiate()
 				CmdSettings["Aura"] = nil
 			elseif Args[1] == ".cdrop" and Args[2] ~= nil and not CmdSettings["CustomDrop"] then
 				local Number = GetNumberFromText(Args[2]) 
-				if Number then
+				if Number and DropFolder then
 					CmdSettings["Aura"] = nil
 					CmdSettings["Dropping"] = false
-					local Drop = workspace.Ignored.Drop
+					
 					local OldMoney = 0
-					for i,v in pairs(Drop:GetChildren()) do
+					for i,v in pairs(DropFolder:GetChildren()) do
 						if v.Name == "MoneyDrop" then
 							local numbers = string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
 							OldMoney += numbers
@@ -636,15 +636,19 @@ local function Initiate()
 								"DropMoney",
 								10000
 							)
-							local Drop = workspace.Ignored.Drop
+						
 							local Money = 0
-							for i,v in pairs(Drop:GetChildren()) do
-								if v.Name == "MoneyDrop" then
-									local numbers = string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
-									Money += numbers
-								end
-							end 
-						until Money >= (OldMoney+Number) or not CmdSettings["CustomDrop"]
+							if DropFolder then
+								for i,v in pairs(DropFolder:GetChildren()) do
+									if v.Name == "MoneyDrop" then
+										local numbers = string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
+										Money += numbers
+									end
+								end 
+							end
+						
+						until not DropFolder or Money >= (OldMoney+Number) or not CmdSettings["CustomDrop"]
+						game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('Custom Drop has been stopped or finished.', 'All'); 
 					end)()
 				end
 			end
