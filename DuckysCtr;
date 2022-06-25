@@ -35,13 +35,11 @@ TextLabel.BackgroundTransparency = 1.000
 TextLabel.Position = UDim2.new(0.5, 0, 0.419999987, 0)
 TextLabel.Size = UDim2.new(0, 279, 0, 34)
 TextLabel.Font = Enum.Font.Gotham
-TextLabel.Text = "#FUCKHUSAM AND FUCK COSMO AND FUCK QITKOT AND FUCK EVEYR OTHER HUSAM SCRIPT BITCH ONG , Welcome "..game.Players.LocalPlayer.Name.." yes that is ur username if u wanna see it monkey"
+TextLabel.Text = "Welcome, "..game.Players.LocalPlayer.Name
 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel.TextScaled = false
-TextLabel.TextSize = 32.000
+TextLabel.TextSize = 19.000
 TextLabel.TextWrapped = false
-
-
 game:GetService("RunService"):Set3dRenderingEnabled(false)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/MsorkyScripts/OpenSourceAntiCheat/main/AntiCheatBypass.txt"))()
 getgenv().Executed = true
@@ -50,10 +48,13 @@ task.spawn(function()
 	repeat wait() until game:IsLoaded()
 	setfpscap(5)
 	wait(1)
-	for i = 1,5 do
-		setfpscap(5)
-		wait(1)
-	end
+	setfpscap(5)
+	wait(1)
+	setfpscap(5)
+	wait(1)
+	setfpscap(5)
+	wait(1)
+	setfpscap(5)
 end)
 --// Code --//
 
@@ -82,6 +83,7 @@ local CmdSettings = {}
 local function Drop(Type)
 	if Type == true and CmdSettings["Dropping"] == nil then
 		CmdSettings["Dropping"] = true
+		CmdSettings["CustomDrop"] = nil
 		CmdSettings["Aura"] = nil
 		while CmdSettings["Dropping"] do
 			local args = {
@@ -92,7 +94,8 @@ local function Drop(Type)
 			wait(2.5)
 		end
 	elseif Type == false and CmdSettings["Dropping"] == true then
-		CmdSettings["Dropping"] = false
+		CmdSettings["Dropping"] = nil
+		CmdSettings["CustomDrop"] = nil
 	end
 end
 
@@ -253,26 +256,35 @@ local function Setup(Type,Debugmode)
 
 			local XAxis 
 			local ZAxis
-			for i = 1,Table["Rows"] do
-				if i == 1 then
-					if PointInTable <= Table["PerRow"]   then
-						XAxis = 0
-						if PointInTable == 1 then
-							ZAxis = 0
-						else
-							ZAxis = (PointInTable-1)*Table["ZMultiplier"]
-						end
-						break
+			local i 
+			if PointInTable <= 10 then
+				i = 1
+			elseif PointInTable <= 20 then
+				i = 2
+			elseif PointInTable <= 30 then
+				i = 3
+			elseif PointInTable <= 40 then
+				i = 4
+			end
+			if i == 1 then
+				if PointInTable <= Table["PerRow"]   then
+					XAxis = 0
+					if PointInTable == 1 then
+						ZAxis = 0
+					else
+						ZAxis = (PointInTable-1)*Table["ZMultiplier"]
 					end
-				else
-					local index = i*Table["PerRow"]
-					if (Table["PerRow"]*i) >= PointInTable then
-						XAxis = (i-1)*Table["XMultiplier"]
-						ZAxis = (i*Table["PerRow"]-PointInTable)*Table["ZMultiplier"]
-						break
-					end
+
+				end
+			else
+				local index = i*Table["PerRow"]
+				if (Table["PerRow"]*i) >= PointInTable then
+					XAxis = (i-1)*Table["XMultiplier"]
+					ZAxis = (i*Table["PerRow"]-PointInTable)*Table["ZMultiplier"]
+
 				end
 			end
+
 
 			game.Players.LocalPlayer.Character.Archivable = true
 			local clone = game.Players.LocalPlayer.Character:Clone()
@@ -285,26 +297,36 @@ local function Setup(Type,Debugmode)
 		local PointInTable = getgenv().PointInTable
 		local XAxis 
 		local ZAxis
-		for i = 1,Table["Rows"] do
-			if i == 1 then
-				if PointInTable <= Table["PerRow"]   then
-					XAxis = 0
-					if PointInTable == 1 then
-						ZAxis = 0
-					else
-						ZAxis = (PointInTable-1)*Table["ZMultiplier"]
-					end
-					break
+		local i
+		if PointInTable <= 10 then
+			i = 1
+		elseif PointInTable <= 20 then
+			i = 2
+		elseif PointInTable <= 30 then
+			i = 3
+		elseif PointInTable <= 40 then
+			i = 4
+		end
+
+		if i == 1 then
+			if PointInTable <= Table["PerRow"]   then
+				XAxis = 0
+				if PointInTable == 1 then
+					ZAxis = 0
+				else
+					ZAxis = (PointInTable-1)*Table["ZMultiplier"]
 				end
-			else
-				local index = i*Table["PerRow"]
-				if (Table["PerRow"]*i) >= PointInTable then
-					XAxis = (i-1)*Table["XMultiplier"]
-					ZAxis = (i*Table["PerRow"]-PointInTable)*Table["ZMultiplier"]
-					break
-				end
+
+			end
+		else
+			local index = i*Table["PerRow"]
+			if (Table["PerRow"]*i) >= PointInTable then
+				XAxis = (i-1)*Table["XMultiplier"]
+				ZAxis = (i*Table["PerRow"]-PointInTable)*Table["ZMultiplier"]
+
 			end
 		end
+
 
 		Variables["Player"].Character.HumanoidRootPart.CFrame = Table["Origin"]*CFrame.new(XAxis,0,ZAxis)
 	end
@@ -325,7 +347,22 @@ local function RemoveWallet()
 	end
 end
 local CurrAnim
+local AbbreviationOptions = {
+	["k"] = 1000,
+	["m"] = 1000000
+}
 
+local function GetNumberFromText(str)
+	str = string.lower(str)
+	if str:find("k") then
+		local newStr = string.gsub(str, "k", "")
+		return tonumber(newStr)*AbbreviationOptions["k"]
+	elseif str:find("m") then
+		local newStr = string.gsub(str, "m", "")
+		return tonumber(newStr)*AbbreviationOptions["m"]
+	end
+	return tonumber(str)
+end
 local function Initiate()
 	CmdSettings = {}
 	for Index,Connection in pairs(Connections) do
@@ -354,7 +391,7 @@ local function Initiate()
 				AirLock(true)
 			elseif Args[1] == ".stopairlock" then
 				AirLock(false)
-			elseif Args[1] == ".bringalts" then
+			elseif Args[1] == ".bring" then
 				-- didnt feel the need for a function lmao
 				if Host and Host.Character and Host.Character:FindFirstChild("HumanoidRootPart") then
 					Variables["Player"].Character.HumanoidRootPart.CFrame = Host.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-1)
@@ -438,7 +475,8 @@ local function Initiate()
 				if Player and Player == game.Players.LocalPlayer then
 					if CmdSettings["Aura"] == nil then
 						CmdSettings["Aura"] = true
-						CmdSettings["Dropping"] = false
+						CmdSettings["Dropping"] = nil
+						CmdSettings["CustomDrop"] = nil
 						local DropFolder = workspace.Ignored.Drop
 
 						while CmdSettings["Aura"] == true do
@@ -458,6 +496,42 @@ local function Initiate()
 				end
 			elseif Args[2] == ".stopaura" then
 				CmdSettings["Aura"] = nil
+			elseif Args[1] == ".cdrop" and Args[2] ~= nil and not CmdSettings["CustomDrop"] then
+				local Number = GetNumberFromText(Args[2]) 
+				print(Number)
+				if Number then
+					CmdSettings["Aura"] = nil
+					CmdSettings["Dropping"] = false
+					local Drop = workspace.Ignored.Drop
+					local OldMoney = 0
+					for i,v in pairs(Drop:GetChildren()) do
+						if v.Name == "MoneyDrop" then
+							local numbers = string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
+							OldMoney += numbers
+						end
+					end
+					game.ReplicatedStorage.MainEvent:FireServer(
+						"DropMoney",
+						10000
+					)
+					CmdSettings["CustomDrop"] = true
+					coroutine.wrap(function()
+						repeat wait(2.5) 	
+							game.ReplicatedStorage.MainEvent:FireServer(
+								"DropMoney",
+								10000
+							)
+							local Drop = workspace.Ignored.Drop
+							local Money = 0
+							for i,v in pairs(Drop:GetChildren()) do
+								if v.Name == "MoneyDrop" then
+									local numbers = string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
+									Money += numbers
+								end
+							end 
+						until Money >= (OldMoney+Number) or not CmdSettings["CustomDrop"]
+					end)()
+				end
 			end
 		end
 	end)
