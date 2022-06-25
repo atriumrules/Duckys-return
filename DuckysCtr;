@@ -403,6 +403,14 @@ local function Initiate()
 		if Host and not Crashed and Variables["Player"].Character and Variables["Player"].Character:FindFirstChild("HumanoidRootPart") and Variables["Player"].Character:FindFirstChild("Humanoid") and Variables["Player"].Character.Humanoid.Health > 0 then
 			if Args[1] == ".drop" then
 				Drop(true)
+			elseif Message == ".loopdel" then
+				local DropFolder = workspace.Ignored.Drop
+				for Index,child in pairs(DropFolder:GetChildren()) do
+					game.Debris:AddItem(child,0.1)
+				end
+				DropFolder.ChildAdded:Connect(function(Child)
+					game.Debris:AddItem(Child,0.1)
+				end)
 			elseif Message == ".circle host" and Host and Host.Character and Host.Character:FindFirstChild("Humanoid") and Host.Character.Humanoid.Health > 0 then
 				local angle = 0
 				local cfr = Host.Character.HumanoidRootPart.CFrame*CFrame.new(0,1,0)
