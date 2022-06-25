@@ -400,13 +400,41 @@ local function Initiate()
 	Connections["OnChat"] = Host.Chatted:Connect(function(Message)
 		local Args = string.split(Message," ")
 		local AmountOfArgs = #Args
- 		if not Crashed and Variables["Player"].Character and Variables["Player"].Character:FindFirstChild("HumanoidRootPart") and Variables["Player"].Character:FindFirstChild("Humanoid") and Variables["Player"].Character.Humanoid.Health > 0 then
+		if Host and not Crashed and Variables["Player"].Character and Variables["Player"].Character:FindFirstChild("HumanoidRootPart") and Variables["Player"].Character:FindFirstChild("Humanoid") and Variables["Player"].Character.Humanoid.Health > 0 then
 			if Args[1] == ".drop" then
 				Drop(true)
-			elseif Args[1] == ".load" and Args[2] == "swag"then
- 				local Player = GetPlayerFromString(Args[3],true)
+			elseif Message == ".circle host" and Host and Host.Character and Host.Character:FindFirstChild("Humanoid") and Host.Character.Humanoid.Health > 0 then
+				local angle = 0
+				local cfr = Host.Character.HumanoidRootPart.CFrame*CFrame.new(0,1,0)
+				local Index = 0
+				local size = 3
+
+				local PointInTable = getgenv().PointInTable
+
+				local ZAxis
+				local angle = 0
+				if PointInTable <= 10 then
+					ZAxis = 2
+					angle = (10-PointInTable)
+				elseif PointInTable <= 20 then
+					ZAxis = -1
+					angle = (20-PointInTable)
+				elseif PointInTable <= 30 then
+					ZAxis = -4
+					angle = (30-PointInTable)
+				elseif PointInTable <= 40 then
+					ZAxis = -8
+					angle = (40-PointInTable)
+				end
+				angle = angle*36
+				local Clone = game.Players.LocalPlayer.Character
+				Clone.HumanoidRootPart.CFrame = cfr * CFrame.fromEulerAnglesXYZ(0,math.rad(angle),0) * CFrame.new(0,-size,-10)
+				Clone.HumanoidRootPart.CFrame=Clone.HumanoidRootPart.CFrame*CFrame.new(0,0,2)
+				Clone.HumanoidRootPart.CFrame=Clone.HumanoidRootPart.CFrame*CFrame.Angles(0,math.rad(180),0)
+ 			elseif Args[1] == ".load" and Args[2] == "swag"then
+				local Player = GetPlayerFromString(Args[3],true)
 				if Player and Player == game.Players.LocalPlayer then
- 					if game.CoreGui:FindFirstChild("RenderScreen") then
+					if game.CoreGui:FindFirstChild("RenderScreen") then
 						game.CoreGui.RenderScreen:Destroy()
 					end
 					game:GetService("RunService"):Set3dRenderingEnabled(true)
@@ -578,7 +606,6 @@ local function Initiate()
 				CmdSettings["Aura"] = nil
 			elseif Args[1] == ".cdrop" and Args[2] ~= nil and not CmdSettings["CustomDrop"] then
 				local Number = GetNumberFromText(Args[2]) 
-				print(Number)
 				if Number then
 					CmdSettings["Aura"] = nil
 					CmdSettings["Dropping"] = false
