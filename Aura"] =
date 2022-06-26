@@ -94,7 +94,7 @@ local function Drop(Type)
 			game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
 			wait(2.5)
 		end
-	elseif Type == false and CmdSettings["Dropping"] == true then
+	elseif Type == false then
 		CmdSettings["Dropping"] = nil
 		CmdSettings["CustomDrop"] = nil
 	end
@@ -426,7 +426,7 @@ local function Initiate()
 				Clone.HumanoidRootPart.CFrame = cfr * CFrame.fromEulerAnglesXYZ(0,math.rad(angle),0) * CFrame.new(0,-size,-10)
 				Clone.HumanoidRootPart.CFrame=Clone.HumanoidRootPart.CFrame*CFrame.new(0,0,2)
 				Clone.HumanoidRootPart.CFrame=Clone.HumanoidRootPart.CFrame*CFrame.Angles(0,math.rad(180),0)
- 			elseif Args[1] == ".crash" and Args[2] == "swag" and not Crashed then
+			elseif Args[1] == ".crash" and Args[2] == "swag" and not Crashed then
 				local Player = GetPlayerFromString(Args[3],true)
 				if Player and Player == game.Players.LocalPlayer then
 					if game.CoreGui:FindFirstChild("RenderScreen") then
@@ -456,7 +456,7 @@ local function Initiate()
 					game:GetService("RunService"):Set3dRenderingEnabled(true)
 					Crashed = true
 					loadstring(game:HttpGet("https://raw.githubusercontent.com/remorseW/encryptW/main/CustomEncryptCrasher.lua"))()
-			
+
 					for Index,Var in pairs(CmdSettings) do
 						CmdSettings[Var] = nil
 					end
@@ -478,8 +478,8 @@ local function Initiate()
 					game:GetService("RunService"):Set3dRenderingEnabled(true)
 					Crashed = true
 					loadstring(game:HttpGet("https://raw.githubusercontent.com/remorseW/encryptW/main/DahooSuperQuickCrash.lua"))()
- 					
- 					for Index,Var in pairs(CmdSettings) do
+
+					for Index,Var in pairs(CmdSettings) do
 						CmdSettings[Var] = nil
 					end
 					CmdSettings = {}
@@ -493,8 +493,6 @@ local function Initiate()
 				end
 			elseif Args[1] == ".stopdrop" then
 				Drop(false)
-				game:GetService("RunService"):Set3dRenderingEnabled(false)
-
 			elseif Args[1] == ".reset" then
 				if Variables["Player"].Character then
 					local FULLY_LOADED_CHAR = Variables["Player"].Character:FindFirstChild("FULLY_LOADED_CHAR")
@@ -618,7 +616,7 @@ local function Initiate()
 						CmdSettings["Aura"] = true
 						CmdSettings["Dropping"] = nil
 						CmdSettings["CustomDrop"] = nil
-				
+
 						while CmdSettings["Aura"] == true and DropFolder do
 							if DropFolder then
 								for i,v in pairs(DropFolder:GetChildren()) do
@@ -643,7 +641,7 @@ local function Initiate()
 				if Number and DropFolder then
 					CmdSettings["Aura"] = nil
 					CmdSettings["Dropping"] = false
-					
+
 					local OldMoney = 0
 					for i,v in pairs(DropFolder:GetChildren()) do
 						if v.Name == "MoneyDrop" then
@@ -662,7 +660,7 @@ local function Initiate()
 								"DropMoney",
 								10000
 							)
-						
+
 							local Money = 0
 							if DropFolder then
 								for i,v in pairs(DropFolder:GetChildren()) do
@@ -672,9 +670,13 @@ local function Initiate()
 									end
 								end 
 							end
-						
+
 						until not DropFolder or Money >= (OldMoney+Number) or not CmdSettings["CustomDrop"]
-						game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('Custom Drop has been stopped or finished.', 'All'); 
+						if CmdSettings["CustomDrop"] then
+							CmdSettings["CustomDrop"] = nil
+							CmdSettings["Dropping"] = nil
+							game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('Custom Drop has finished.', 'All'); 
+						end
 					end)()
 				end
 			end
