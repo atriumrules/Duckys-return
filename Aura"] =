@@ -377,8 +377,9 @@ local function Initiate()
 		Index[Connection] = nil
 		Connection:Disconnect()
 	end
-	Connections["OnChat"] = Host.Chatted:Connect(function(Message)
-		Message = string.lower(Message)
+	Connections["OnChat"] = game.ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEvent:Connect(function(data)
+ 		local Message
+ 		Message = string.lower(Message)
 		local Args = string.split(Message," ")
 		local AmountOfArgs = #Args
 		if Host and not Crashed and Variables["Player"].Character and Variables["Player"].Character:FindFirstChild("HumanoidRootPart") and Variables["Player"].Character:FindFirstChild("Humanoid") and Variables["Player"].Character.Humanoid.Health > 0 then
