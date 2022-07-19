@@ -380,7 +380,7 @@ local function Initiate()
 	Connections["OnChat"] = game.ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEvent:Connect(function(data)
  		local Message = data.Message
 		local plr = game:service"Players"[data.FromSpeaker]
-		if plr.Name ~= getgenv().Host then
+		if plr.Name ~= getgenv().HostUser then
 			return
 		end
  		Message = string.lower(Message)
